@@ -8,37 +8,26 @@
      ## ## ## :##
       ## ## ##."
 
+# Based on the work of kube (github.com/kube/42homebrew)
+
 # Delete and reinstall Homebrew from Github repo
-rm -rf $HOME/.brew
-git clone --depth=1 https://github.com/Homebrew/brew $HOME/.brew
+rm -rf $HOME/homebrew
+git clone --depth=1 https://github.com/Homebrew/brew $HOME/homebrew
+
+# Create $HOME/homebrew/Caches and $HOME/homebrew/Temp
+mkdir -p $HOME/homebrew/Caches
+mkdir -p $HOME/homebrew/Temp
 
 # Create .brewconfig script in home directory 
 cat > $HOME/.brewconfig.zsh <<EOL
 # HOMEBREW CONFIG
 
 # Add brew to path
-export PATH=\$HOME/.brew/bin:\$PATH
+export PATH=\$HOME/homebrew/bin:\$PATH
 
 # Set Homebrew temporary folders
-export HOMEBREW_CACHE=/tmp/\$USER/Homebrew/Caches
-export HOMEBREW_TEMP=/tmp/\$USER/Homebrew/Temp
-
-mkdir -p \$HOMEBREW_CACHE
-mkdir -p \$HOMEBREW_TEMP
-
-HOMEBREW_LOCKS_TARGET=/tmp/\$USER/Homebrew/Locks
-HOMEBREW_LOCKS_FOLDER=\$HOME/.brew/var/homebrew
-
-mkdir -p \$HOMEBREW_LOCKS_TARGET
-mkdir -p \$HOMEBREW_LOCKS_FOLDER
-
-# Symlink to Locks target folders
-# If not already a symlink
-if ! [[ -L \$HOMEBREW_LOCKS_FOLDER && -d \$HOMEBREW_LOCKS_FOLDER ]]; then
-  echo "Creating symlink for Locks folder"
-  rm -rf \$HOMEBREW_LOCKS_FOLDER
-  ln -s \$HOMEBREW_LOCKS_TARGET \$HOMEBREW_LOCKS_FOLDER
-fi
+export HOMEBREW_CACHE=\$HOME/homebrew/Caches
+export HOMEBREW_TEMP=\$HOME/homebrew/Temp
 EOL
 
 # Add .brewconfig sourcing in your .zshrc if not already present
